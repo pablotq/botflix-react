@@ -1,7 +1,7 @@
 import { useCallback, useState, type KeyboardEvent } from 'react'
 import type { Movie, MovieSearchResponse } from '../types/movie'
 
-const MOVIE_RECOMMENDATION_ENDPOINT = 'https://poceka9232.app.n8n.cloud/webhook/botflix'
+const MOVIE_RECOMMENDATION_ENDPOINT = 'https://keyoc31718.app.n8n.cloud/webhook/botflix'
 
 // Fetch recommendation from the BotFlix backend.
 // Encapsula a chamada HTTP e retorna o primeiro resultado disponível.
