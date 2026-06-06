@@ -1,4 +1,5 @@
 import type { KeyboardEvent } from 'react'
+import type { TranslationKey } from '../i18n'
 
 type SearchCardProps = {
   mood: string
@@ -6,13 +7,9 @@ type SearchCardProps = {
   onMoodChange: (value: string) => void
   onMoodKeyDown: (event: KeyboardEvent<HTMLTextAreaElement>) => void
   onSearch: () => void
+  examples: string[]
+  t: (key: TranslationKey) => string
 }
-
-const examples = [
-  'Quero algo engraçado para relaxar depois do trabalho',
-  'Estou procurando um thriller que me deixe na ponta da cadeira',
-  'Algo romântico para assistir com minha namorada',
-]
 
 export function SearchCard({
   mood,
@@ -20,6 +17,8 @@ export function SearchCard({
   onMoodChange,
   onMoodKeyDown,
   onSearch,
+  examples,
+  t,
 }: SearchCardProps) {
   return (
     <section className="search-card">
@@ -31,15 +30,15 @@ export function SearchCard({
             value={mood}
             onChange={(event) => onMoodChange(event.target.value)}
             onKeyDown={onMoodKeyDown}
-            placeholder="Digite como você está se sentindo ou quer assistir..."
+            placeholder={t('placeholder')}
             className="mood-textarea"
-            aria-label="Descreva seu humor ou preferência de filme"
+            aria-label={t('ariaLabel')}
             aria-describedby="mood-examples"
           />
         </div>
 
         <div className="examples">
-          <h3 className="examples-title">Exemplos:</h3>
+          <h3 className="examples-title">{t('examplesTitle')}</h3>
           <ul id="mood-examples" className="examples-list">
             {examples.map((example) => (
               <li key={example}>{example}</li>
@@ -55,9 +54,9 @@ export function SearchCard({
           disabled={loading}
         >
           <span className="play-icon" aria-hidden="true">
-            &#9654;
+            &#9654;&nbsp;
           </span>
-          {loading ? ' Buscando...' : 'Encontrar a Sugestão Perfeita'}
+          {loading ? ` ${t('searching')}` : t('searchButton')}
         </button>
       </div>
     </section>

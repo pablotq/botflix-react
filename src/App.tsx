@@ -1,13 +1,16 @@
 import robotImage from './assets/botflix-robot.jpg'
 import './App.css'
 import { ErrorMessage } from './components/ErrorMessage'
+import { LanguageSwitcher } from './components/LanguageSwitcher'
 import { MovieResult } from './components/MovieResult'
 import { SearchCard } from './components/SearchCard'
 import { useMovieSearch } from './hooks/useMovieSearch'
+import { I18nProvider, useI18n } from './i18n'
 
-function App() {
-  // Camada de composição: exibe o layout geral e delega a lógica de busca ao hook customizado.
-  const { mood, movie, loading, error, setMood, handleSearch, handleMoodKeyDown } = useMovieSearch()
+function AppContent() {
+  const { t } = useI18n()
+  const { mood, movie, loading, error, setMood, handleSearch, handleMoodKeyDown } = useMovieSearch(t)
+  const examples = [t('example1'), t('example2'), t('example3')]
 
   return (
     <>
@@ -19,10 +22,11 @@ function App() {
         <div className="main-content">
           <header className="brand-header">
             <div className="container-logo">
-              <img src={robotImage} alt="Assistente robô BotFlix" className="robot-image" />
+              <img src={robotImage} alt={t('robotAlt')} className="robot-image" />
               <h1 className="brand-title">BotFlix</h1>
             </div>
-            <p className="brand-subtitle">Seu assistente pessoal para encontrar filme ou série perfeitos</p>
+            <LanguageSwitcher />
+            <p className="brand-subtitle">{t('brandSubtitle')}</p>
           </header>
 
           <SearchCard
@@ -31,14 +35,24 @@ function App() {
             onMoodChange={setMood}
             onMoodKeyDown={handleMoodKeyDown}
             onSearch={handleSearch}
+            examples={examples}
+            t={t}
           />
 
           <ErrorMessage message={error} />
 
-          {movie && <MovieResult movie={movie} />}
+          {movie && <MovieResult movie={movie} t={t} />}
         </div>
       </main>
     </>
+  )
+}
+
+function App() {
+  return (
+    <I18nProvider>
+      <AppContent />
+    </I18nProvider>
   )
 }
 

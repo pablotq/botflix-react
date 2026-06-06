@@ -1,9 +1,9 @@
 import { useCallback, useState, type KeyboardEvent } from 'react'
 import type { Movie, MovieSearchResponse } from '../types/movie'
+import type { TranslationKey } from '../i18n'
 
 const MOVIE_RECOMMENDATION_ENDPOINT = 'https://keyoc31718.app.n8n.cloud/webhook/botflix'
 
-// Fetch recommendation from the BotFlix backend.
 // Encapsula a chamada HTTP e retorna o primeiro resultado disponível.
 async function fetchMovieRecommendation(prompt: string): Promise<Movie | null> {
   const response = await fetch(MOVIE_RECOMMENDATION_ENDPOINT, {
@@ -22,7 +22,7 @@ async function fetchMovieRecommendation(prompt: string): Promise<Movie | null> {
   return Array.isArray(data.results) ? data.results[0] ?? null : null
 }
 
-export function useMovieSearch() {
+export function useMovieSearch(t: (key: TranslationKey) => string) {
   // Mantém o estado da busca separado da camada de apresentação.
   const [mood, setMood] = useState('')
   const [movie, setMovie] = useState<Movie | null>(null)
@@ -33,7 +33,7 @@ export function useMovieSearch() {
     const trimmedMood = mood.trim()
 
     if (!trimmedMood) {
-      setError('Por favor, insira algo antes de buscar.')
+      setError(t('noInputError'))
       setMovie(null)
       return
     }
@@ -46,7 +46,7 @@ export function useMovieSearch() {
 
       if (!recommendation) {
         setMovie(null)
-        setError('Nenhum resultado encontrado. Tente outra descrição.')
+        setError(t('noResultError'))
         return
       }
 
@@ -54,11 +54,11 @@ export function useMovieSearch() {
     } catch (fetchError) {
       console.error('Erro ao buscar o filme:', fetchError)
       setMovie(null)
-      setError('Ocorreu um erro ao buscar o filme. Por favor, tente novamente mais tarde.')
+      setError(t('fetchError'))
     } finally {
       setLoading(false)
     }
-  }, [mood])
+  }, [mood, t])
 
   const handleMoodKeyDown = useCallback(
     (event: KeyboardEvent<HTMLTextAreaElement>) => {
