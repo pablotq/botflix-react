@@ -2,7 +2,7 @@ import { useCallback, useState, type KeyboardEvent } from 'react'
 import type { Movie, MovieSearchResponse } from '../types/movie'
 import type { TranslationKey } from '../i18n'
 
-const MOVIE_RECOMMENDATION_ENDPOINT = 'https://ximaf81744.app.n8n.cloud/webhook-test/botflix'
+const MOVIE_RECOMMENDATION_ENDPOINT = 'https://ximaf81744.app.n8n.cloud/webhook/botflix'
 
 // Encapsula a chamada HTTP e retorna o primeiro resultado disponível.
 async function fetchMovieRecommendation(prompt: string): Promise<Movie | null> {
